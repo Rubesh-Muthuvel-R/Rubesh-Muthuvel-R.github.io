@@ -7,8 +7,9 @@ const createCooldown = require('./create-cooldown');
 
 const app = express();
 
-app.use(express.static(`${__dirname}/../client`));
+app.use(express.static('./'));
 
+const port = process.env.port || 3000;
 const server = http.createServer(app);
 const io = socketio(server);
 const { clear, getBoard, makeTurn } = createBoard(20);
@@ -38,6 +39,6 @@ server.on('error', (err) => {
   console.error(err);
 });
 
-server.listen(555, () => {
-  console.log('server is ready');
+server.listen(port, () => {
+  console.log(port);
 });
