@@ -7,6 +7,7 @@ const log = (text) => {
     parent.scrollTop = parent.scrollHeight;
   };
   
+
   const onChatSubmitted = (sock) => (e) => {
     e.preventDefault();
   
@@ -67,8 +68,11 @@ const log = (text) => {
   
     const reset = (board) => {
       clear();
+      const timer = document.getElementById('timer');
+      timer.innerHTML = "MAP 5 CELLS IN \"ROW/COLUMN/DIAGONAL\" TO WIN";
       drawGrid();
-      renderBoard(board)
+      renderBoard(board);
+      
     };
   
     const getCellCoordinates = (x, y) => {
@@ -86,10 +90,24 @@ const log = (text) => {
     const canvas = document.querySelector('canvas');
     const { fillCell, reset, getCellCoordinates } = getBoard(canvas);
     const sock = io();
+    
   
     const onClick = (e) => {
+      
+      let counter = 3;
       const { x, y } = getClickCoordinates(canvas, e);
+       const timer = document.getElementById('timer');
+      timer.innerHTML = "Click in 00:0" + counter +"!!!!!";    
+      setInterval(loop,1000);
+      function loop(){
+        if(counter>0){
+        counter--; 
+        timer.innerHTML = "Click in 00:0" + counter +"!!!!!";
+        }
+      }
+      
       sock.emit('turn', getCellCoordinates(x, y));
+      
     };
   
     sock.on('board', reset);
